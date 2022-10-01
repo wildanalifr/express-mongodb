@@ -16,7 +16,10 @@ export const register = async (req, res, next) => {
     })
 
     if (isDuplicate.length != 0) {
-      res.status(401).json({ message: 'Username atau Email tidak boleh sama' })
+      res.status(400).json({
+        status: 'BAD_REQUEST',
+        message: 'Username atau Email tidak boleh sama',
+      })
     }
 
     const salt = bcrypt.genSaltSync(10)
@@ -30,7 +33,7 @@ export const register = async (req, res, next) => {
     })
     await newUser.save()
     res.status(201).json({
-      status: true,
+      status: 'OK',
       message: 'Berhasil Register',
     })
   } catch (error) {
@@ -45,7 +48,9 @@ export const login = async (req, res, next) => {
     const user = await User.findOne({ username: username })
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!user || !isPasswordCorrect) {
-      res.status(400).json({ message: 'Username atau Password salah' })
+      res
+        .status(400)
+        .json({ status: 'OK', message: 'Username atau Password salah' })
     } else {
       const { password, ...otherDetails } = user._doc
       const token = jwt.sign(
