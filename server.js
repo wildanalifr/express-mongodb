@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import cookieParser from 'cookie-parser'
 
 //ROUTER
 import router from './routes/index.js'
@@ -11,6 +12,7 @@ dotenv.config()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 const connect = async () => {
   try {
